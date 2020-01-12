@@ -7,13 +7,21 @@ namespace Graph.Test
     [TestClass]
     public class VertexTest
     {
+        Vertex<char> v1;
+        Vertex<char> v2;
+        Vertex<char> v3;
+
+        [TestInitialize]
+        public void Init()
+        {
+            v1 = new Vertex<char>('a');
+            v2 = new Vertex<char>('b');
+            v3 = new Vertex<char>('c');
+        }
+
         [TestMethod]
         public void ContsturctorTest()
         {
-            var v1 = GetCharVertex('a');
-            var v2 = GetCharVertex('b');
-            var v3 = GetCharVertex('c');
-
             Assert.AreEqual('a', v1.Value);
             Assert.IsFalse(v1.WasWisited);
 
@@ -24,7 +32,16 @@ namespace Graph.Test
             Assert.IsFalse(v3.WasWisited);
         }
 
-        private Vertex<char> GetCharVertex(char label)
-            => new Vertex<char>(label);
+        [TestMethod]
+        public void WasWisitedTest()
+        {
+            v1.WasWisited = true;
+            v2.WasWisited = true;
+            v3.WasWisited = true;
+
+            Assert.IsTrue(v1.WasWisited);
+            Assert.IsTrue(v2.WasWisited);
+            Assert.IsTrue(v3.WasWisited);
+        }
     }
 }

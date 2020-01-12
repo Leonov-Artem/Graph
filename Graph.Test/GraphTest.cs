@@ -17,10 +17,19 @@ namespace Graph.Test
         [TestMethod]
         public void AddEdgeTest()
         {
-            var begin = new Vertex<char>('A');
-            var end = new Vertex<char>('B');
-            var edge = new Edge<char>(begin, end);
-            graph.AddEdge(edge);
+            var firstVertex = new Vertex<char>('A');
+            var secondVertex = new Vertex<char>('B');
+
+            var firstEdge = new Edge<char>(firstVertex, secondVertex);
+            var secondEdge = new Edge<char>(secondVertex, firstVertex);
+
+            graph.AddEdge(firstEdge);
+            Assert.AreEqual(1, graph.EdgesCount);
+            Assert.AreEqual(2, graph.VerticesCount);
+
+            graph.AddEdge(secondEdge);
+            Assert.AreEqual(2, graph.EdgesCount);
+            Assert.AreEqual(2, graph.VerticesCount);
         }
     }
 }

@@ -32,15 +32,13 @@ namespace Graph
 
         public void AddEdge(Edge<T> newEdge)
         {
-            AddToEdges(newEdge);
-            AddToVertices(newEdge);
+            bool wasAdded = AddToVerticesAndEdges(newEdge);
 
-            //foreach (var edge in _edges)
-            //{
-
-            //    _adjMatrix[edge.Begin.Index,
-            //               edge.End.Index] = edge.Weight;
-            //}
+            if (wasAdded)
+            {
+                _adjMatrix[StartIndexVertex(newEdge),
+                           EndIndexVertex(newEdge)] = newEdge.Weight;
+            }
         }
 
         public string DFS(Vertex<T> startVertex)
@@ -74,17 +72,58 @@ namespace Graph
                 _edges.Add(newEdge);
         }
 
-        private void AddToVertices(Vertex<T> newVertex)
+        private bool AddToVertices(Vertex<T> newVertex)
         {
             if (!_vertices.Contains(newVertex))
-                _vertices.Add(newVertex);
+            {
+                if (VerticesCount + 1 < MAX_VERTICES)
+                {
+                    _vertices.Add(newVertex);
+                    return true;
+                }
+                else
+                    throw new Exception($"Число вершин должно быть меньше {MAX_VERTICES}!");
+            }
+
+            return true;
         }
 
-        private void AddToVertices(Edge<T> newEdge)
+        private bool AddToVertices(Edge<T> newEdge)
         {
-            AddToVertices(newEdge.Begin);
-            AddToVertices(newEdge.End);
+            try
+            {
+                if (AddToVertices(newEdge.Start) &&
+                    AddToVertices(newEdge.End))
+                    return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return false;
         }
+
+        private bool AddToVerticesAndEdges(Edge<T> newEdge)
+        {
+            bool wasAddedToVertices = AddToVertices(newEdge);
+            if (wasAddedToVertices)
+            {
+                AddToEdges(newEdge);
+                return true;
+            }
+
+            return false;
+        }
+
+        private int VertexIndex(Vertex<T> vertex)
+            => _vertices.IndexOf(vertex);
+
+        private int StartIndexVertex(Edge<T> newEdge)
+            => VertexIndex(newEdge.Start);
+
+        private int EndIndexVertex(Edge<T> newEdge)
+            => VertexIndex(newEdge.End);
 
         #endregion
     }
