@@ -10,8 +10,7 @@ namespace Graph
     {
         static void Main(string[] args)
         {
-            Vertex<int> vertex = new Vertex<int>(1);
-           
+            
         }
     }
 }

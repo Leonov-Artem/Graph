@@ -9,14 +9,11 @@ namespace Graph
     {
         public bool WasWisited { get; set; }
 
-        public static int Index { get; private set; } = -1;
-
         public T Value { get; }
 
         public Vertex(T value)
-        {
+        {   
             Value = value;
-            Index++;
         }
     }
 }
