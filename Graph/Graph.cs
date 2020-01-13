@@ -8,6 +8,7 @@ namespace Graph
     public class Graph<T>
     {
         const int MAX_VERTICES = 20;
+        const int NO_ADJACENT_UNVISITED_VERTICES = -1;
 
         double[,] _adjMatrix;
         List<Edge<T>> _edges;
@@ -45,7 +46,29 @@ namespace Graph
         {
             if (AdjMatrixIsNotNull())
             {
-                return "";
+                var dfs = string.Empty;
+                var stack = new Stack<Vertex<T>>();
+
+                startVertex.WasWisited = true;
+                dfs += $"{startVertex.Value}-";
+                stack.Push(startVertex);
+
+                while(stack.Count != 0)
+                {
+                    int index = GetIndexUnvisitedVertex(stack.Peek());
+                    if (index == NO_ADJACENT_UNVISITED_VERTICES)
+                        stack.Pop();
+                    else
+                    {
+                        _vertices[index].WasWisited = true;
+                        dfs += $"{_vertices[index].Value}-";
+                        stack.Push(_vertices[index]);
+                    }
+                }
+
+                SetAllVerticesAsUnvisited();
+
+                return dfs.Remove(dfs.Length - 1);
             }
             else
                 return string.Empty;
@@ -124,6 +147,28 @@ namespace Graph
 
         private int EndIndexVertex(Edge<T> newEdge)
             => VertexIndex(newEdge.End);
+
+        private bool VerticesAreAdjacent(int firstVertex, int secondVertex)
+            => _adjMatrix[firstVertex, secondVertex] != 0;
+
+        private void SetAllVerticesAsUnvisited()
+        {
+            foreach (var vertex in _vertices)
+                vertex.WasWisited = false;
+        }
+
+        private int GetIndexUnvisitedVertex(Vertex<T> vertex)
+        {
+            int v = VertexIndex(vertex);
+            for (int j = 0; j < VerticesCount; j++)
+            {
+                // если вершина v смежна с j и не была посещена
+                if (VerticesAreAdjacent(v, j) && !_vertices[j].WasWisited)
+                    return j;
+            }
+
+            return NO_ADJACENT_UNVISITED_VERTICES;
+        }
 
         #endregion
     }
