@@ -76,7 +76,7 @@ namespace Graph
         {
             if (!_vertices.Contains(newVertex))
             {
-                if (VerticesCount + 1 < MAX_VERTICES)
+                if (VerticesCount + 1 <= MAX_VERTICES)
                 {
                     _vertices.Add(newVertex);
                     return true;
